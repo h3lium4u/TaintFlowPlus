@@ -17,6 +17,10 @@
       {
         "command": "veribuild.verifyCurrentFile",
         "title": "VeriBuild: Verify Current File"
+      },
+      {
+        "command": "veribuild.configureGroq",
+        "title": "VeriBuild: Configure Groq Key"
       }
     ]
   },

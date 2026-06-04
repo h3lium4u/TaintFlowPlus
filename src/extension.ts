@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs';
 import { VeriBuildEngine, Finding } from './veribuild-core';
+import { configureGroq } from './configuration';
 
 let watcher: chokidar.FSWatcher | undefined;
 let diagnosticCollection: vscode.DiagnosticCollection;
@@ -87,7 +88,12 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     });
 
+    const configureGroqCommand = vscode.commands.registerCommand('veribuild.configureGroq', async () => {
+        await configureGroq(context);
+    });
+
     context.subscriptions.push(verifyCommand);
+    context.subscriptions.push(configureGroqCommand);
     outputChannel.appendLine("VeriBuild extension activated successfully.");
 }
 

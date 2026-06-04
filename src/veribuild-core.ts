@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
+import Groq from 'groq-sdk';
 
 export interface Finding {
     message: string;
@@ -160,22 +161,15 @@ export class GoogleProvider implements Provider {
 export class GroqProvider implements Provider {
     async call(prompt: string, context: ProviderContext): Promise<string> {
         try {
-            const response = await axios.post(
-                'https://api.groq.com/openai/v1/chat/completions',
-                {
-                    model: 'llama3-8b-8192',
-                    messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.2,
-                },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${context.apiKey}`,
-                        'Content-Type': 'application/json',
-                    },
-                    timeout: 30000,
-                }
-            );
-            return response.data.choices[0].message.content;
+            const groq = new Groq({
+                apiKey: context.apiKey,
+            });
+            const chatCompletion = await groq.chat.completions.create({
+                messages: [{ role: 'user', content: prompt }],
+                model: 'llama3-70b-8192',
+                temperature: 0.2,
+            });
+            return chatCompletion.choices[0]?.message?.content || '';
         } catch (error: any) {
             this.handleError(error);
             throw error;
@@ -183,21 +177,14 @@ export class GroqProvider implements Provider {
     }
 
     private handleError(error: any) {
-        if (error.response) {
-            const status = error.response.status;
-            const errorData = error.response.data;
-            const errorMsg = typeof errorData === 'object' ? JSON.stringify(errorData) : String(errorData);
-            if (status === 429 || 
-                errorMsg.toLowerCase().includes('rate') || 
-                errorMsg.toLowerCase().includes('quota') || 
-                errorMsg.toLowerCase().includes('limit')) {
-                throw new Error(`rate_limit_or_quota_exceeded: ${errorMsg}`);
-            }
-        } else if (error.message) {
-            const msg = error.message.toLowerCase();
-            if (msg.includes('429') || msg.includes('rate') || msg.includes('quota') || msg.includes('limit')) {
-                throw new Error(`rate_limit_or_quota_exceeded: ${error.message}`);
-            }
+        const status = error.status;
+        const msg = String(error.message || error).toLowerCase();
+        
+        if (status === 429 || 
+            msg.includes('rate') || 
+            msg.includes('quota') || 
+            msg.includes('limit')) {
+            throw new Error(`rate_limit_or_quota_exceeded: ${error.message || error}`);
         }
     }
 }

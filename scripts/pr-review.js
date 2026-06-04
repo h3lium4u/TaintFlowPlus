@@ -3,19 +3,50 @@ const github = require('@actions/github');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const Module = require('module');
+
+// Intercept require('vscode') and return mock implementation
+const originalRequire = Module.prototype.require;
+Module.prototype.require = function(id) {
+  if (id === 'vscode') {
+    return {
+      workspace: {
+        getConfiguration: (section) => ({
+          get: (key, defaultValue) => {
+            const envKey = `VERIBUILD_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
+            const envVal = process.env[envKey];
+            if (envVal !== undefined) {
+              try { return JSON.parse(envVal); } catch { return envVal; }
+            }
+            if (key === 'providers') return ['openai', 'anthropic', 'google', 'groq'];
+            return defaultValue;
+          }
+        })
+      },
+      commands: {
+        executeCommand: async () => {}
+      },
+      window: {
+        createOutputChannel: () => ({
+          appendLine: () => {}
+        })
+      }
+    };
+  }
+  return originalRequire.apply(this, arguments);
+};
 
 // Ensure root typescript compilation is done before requiring core module
 try {
   core.info('Compiling TypeScript files...');
-  execSync('npx tsc', { stdio: 'inherit' });
+  execSync('npx tsc src/veribuild-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
 } catch (err) {
   core.error('TypeScript compilation warning/error: ' + err.message);
 }
 
-const { VeriBuildEngine } = require('../out/veribuild-core.js');
-
 async function run() {
   try {
+    const { VeriBuildEngine } = require('../out/veribuild-core.js');
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
       core.setFailed('Missing GITHUB_TOKEN environment variable');

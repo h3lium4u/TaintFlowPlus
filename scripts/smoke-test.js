@@ -1,23 +1,60 @@
 const { execSync } = require('child_process');
+const Module = require('module');
 
+// 1. Intercept require('vscode') and return mock implementation
+const originalRequire = Module.prototype.require;
+Module.prototype.require = function(id) {
+  if (id === 'vscode') {
+    return {
+      workspace: {
+        getConfiguration: (section) => ({
+          get: (key, defaultValue) => {
+            const envKey = `VERIBUILD_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
+            const envVal = process.env[envKey];
+            if (envVal !== undefined) {
+              try { return JSON.parse(envVal); } catch { return envVal; }
+            }
+            if (key === 'providers') return ['openai', 'anthropic', 'google', 'groq'];
+            return defaultValue;
+          }
+        })
+      },
+      commands: {
+        executeCommand: async () => {}
+      },
+      window: {
+        createOutputChannel: () => ({
+          appendLine: () => {}
+        })
+      }
+    };
+  }
+  return originalRequire.apply(this, arguments);
+};
+
+// 2. Compile veribuild-core.ts to CommonJS for script environment compatibility
 try {
-  execSync('npx tsc', { stdio: 'inherit' });
+  console.log('Compiling veribuild-core.ts...');
+  execSync('npx tsc src/veribuild-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
 } catch (err) {
-  console.warn('Compilation finished with warnings or errors.');
+  console.warn('Compilation warnings/errors encountered.');
 }
 
 const { VeriBuildEngine } = require('../out/veribuild-core.js');
 
 const mockContext = {
   secrets: {
-    get: async () => undefined,
+    get: async (key) => {
+      const envKey = key.toUpperCase().replace(/\./g, '_');
+      return process.env[envKey] || process.env[envKey.replace('VERIBUILD_', '')];
+    },
     store: async () => {},
     delete: async () => {}
   }
 };
 
 const mockOutputChannel = {
-  appendLine: (value) => console.log(`[Log] ${value}`)
+  appendLine: (value) => console.log(`[Engine Log] ${value}`)
 };
 
 async function run() {

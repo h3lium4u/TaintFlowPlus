@@ -4,7 +4,7 @@
   "description": "",
   "main": "out/extension.js",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.85.0"
   },
   "activationEvents": [
     "onLanguage:javascript",
@@ -34,6 +34,7 @@
     "@actions/core": "^3.0.1",
     "@actions/github": "^9.1.1",
     "axios": "^1.17.0",
-    "chokidar": "^5.0.0"
+    "chokidar": "^5.0.0",
+    "groq-sdk": "^1.2.1"
   }
 }

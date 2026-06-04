@@ -1,0 +1,45 @@
+# Ignore everything except the compiled output
+
+# Source files (don't need in production)
+src/
+*.ts
+tsconfig.json
+
+# Test files
+test.js
+test-vulns.js
+
+# Git files
+.git/
+.gitignore
+
+# Node modules (will be installed separately)
+node_modules/
+**/node_modules/
+
+# MCP server (separate deployment)
+mcp-server/
+**/mcp-server/
+
+# OXP server (separate deployment)
+oxp-server/
+**/oxp-server/
+
+# Scripts
+scripts/
+
+# GitHub workflows
+.github/
+
+# VS Code workspace files
+.vscode/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Only include the compiled output and essential files
+!out/
+!package.json
+!LICENSE
+!README.md

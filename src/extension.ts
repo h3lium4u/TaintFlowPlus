@@ -8,6 +8,7 @@ let watcher: chokidar.FSWatcher | undefined;
 let diagnosticCollection: vscode.DiagnosticCollection;
 let outputChannel: vscode.OutputChannel;
 let engine: VeriBuildEngine;
+let statusBarItem: vscode.StatusBarItem | undefined;
 const debounceTimers = new Map<string, NodeJS.Timeout>();
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -94,6 +95,33 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(verifyCommand);
     context.subscriptions.push(configureGroqCommand);
+
+    // Initialize Status Bar Item
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    statusBarItem.text = "$(shield) VeriBuild: Active";
+    statusBarItem.tooltip = "VeriBuild Code Security Analysis is active";
+    statusBarItem.show();
+    context.subscriptions.push(statusBarItem);
+
+    // Listen to document open events
+    context.subscriptions.push(
+        vscode.workspace.onDidOpenTextDocument((document) => {
+            handleDocumentChange(document);
+        })
+    );
+
+    // Listen to document change events (with 500ms debounce inside handleDocumentChange)
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeTextDocument((event) => {
+            handleDocumentChange(event.document);
+        })
+    );
+
+    // Verify all currently visible editors on start
+    for (const editor of vscode.window.visibleTextEditors) {
+        handleDocumentChange(editor.document);
+    }
+
     outputChannel.appendLine("VeriBuild extension activated successfully.");
 }
 
@@ -108,6 +136,10 @@ export async function deactivate() {
     debounceTimers.clear();
     if (diagnosticCollection) {
         diagnosticCollection.dispose();
+    }
+    if (statusBarItem) {
+        statusBarItem.dispose();
+        statusBarItem = undefined;
     }
     if (outputChannel) {
         outputChannel.dispose();
@@ -128,6 +160,31 @@ function handleFileChange(filePath: string) {
             await showDiagnosticsForFile(filePath, findings);
         } catch (err) {
             outputChannel.appendLine(`Error reading or analyzing file ${filePath}: ${err}`);
+        }
+    }, 500);
+
+    debounceTimers.set(filePath, timer);
+}
+
+function handleDocumentChange(document: vscode.TextDocument) {
+    if (document.uri.scheme !== 'file') {
+        return;
+    }
+    const filePath = document.uri.fsPath;
+
+    if (debounceTimers.has(filePath)) {
+        clearTimeout(debounceTimers.get(filePath)!);
+    }
+
+    const timer = setTimeout(async () => {
+        debounceTimers.delete(filePath);
+        try {
+            outputChannel.appendLine(`Analyzing active document: ${filePath}`);
+            const content = document.getText();
+            const findings = await engine.analyzeCode(content, filePath);
+            await showDiagnosticsForFile(filePath, findings);
+        } catch (err) {
+            outputChannel.appendLine(`Error analyzing document ${filePath}: ${err}`);
         }
     }, 500);
 

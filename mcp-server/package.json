@@ -1,0 +1,19 @@
+{
+  "name": "veribuild-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/mcp-server/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/mcp-server/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "axios": "^1.17.0",
+    "vscode": "file:./vscode-mock"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "@types/node": "^22.0.0"
+  }
+}

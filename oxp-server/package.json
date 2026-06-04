@@ -1,0 +1,20 @@
+{
+  "name": "veribuild-oxp",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/oxp-server/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/oxp-server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "axios": "^1.17.0",
+    "vscode": "file:./vscode-mock"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "@types/node": "^22.0.0",
+    "@types/express": "^5.0.0"
+  }
+}

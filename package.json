@@ -1,0 +1,24 @@
+{
+  "name": "veribuild",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "@types/vscode": "^1.120.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
+    "axios": "^1.17.0",
+    "chokidar": "^5.0.0"
+  }
+}

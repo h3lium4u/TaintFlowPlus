@@ -2,13 +2,24 @@
   "name": "veribuild",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "out/extension.js",
+  "engines": {
+    "vscode": "^1.60.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:python",
+    "onCommand:veribuild.verifyCurrentFile"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "veribuild.verifyCurrentFile",
+        "title": "VeriBuild: Verify Current File"
+      }
+    ]
+  },
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^25.9.1",

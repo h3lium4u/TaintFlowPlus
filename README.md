@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![TaintFlow+ Logo](https://files.catbox.moe/7z8muw.png)
+![TaintFlow+ Logo](https://files.catbox.moe/ep1u9c.png)
 
 </div>
 

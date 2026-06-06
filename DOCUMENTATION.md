@@ -19,7 +19,7 @@ This guide provides a focused overview of the **TaintFlow+** project, configurat
 
 ## 2. Version Information
 
-*   **Current Stable Version**: `1.0.1`
+*   **Current Stable Version**: `1.0.2`
 *   **Extension ID**: `f1zz4n.taintflow-plus`
 *   **Publisher ID**: `F1ZZ4N`
 *   **License**: `MIT`

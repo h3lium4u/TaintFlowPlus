@@ -1,6 +1,6 @@
 {
   "name": "taintflow-monorepo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TaintFlow+ Monorepo Root — Security static analysis and AI verification suite",
   "repository": {
     "type": "git",

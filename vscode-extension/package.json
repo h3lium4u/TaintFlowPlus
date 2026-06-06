@@ -2,7 +2,7 @@
   "name": "taintflow-plus",
   "displayName": "TaintFlow+ v1",
   "description": "AI-Powered Security Verification & Repository Intelligence",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "F1ZZ4N",
   "icon": "resources/shield.png",
   "repository": {

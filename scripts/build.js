@@ -50,6 +50,14 @@ async function main() {
     // 6. Package VS Code Extension using vsce
     console.log('\nPackaging VS Code Extension...');
     try {
+        // Clean up old vsix files first
+        const filesBefore = fs.readdirSync(vscodeDir);
+        for (const file of filesBefore) {
+            if (file.endsWith('.vsix')) {
+                fs.unlinkSync(path.join(vscodeDir, file));
+            }
+        }
+
         runCommand('npx -y @vscode/vsce package --no-dependencies', vscodeDir);
         
         // Find the packaged .vsix file and copy it to root

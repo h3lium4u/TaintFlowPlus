@@ -74,8 +74,8 @@ When a taint source is detected (e.g. `request.body`), TaintFlow+ traces the pat
 
 *Screenshots illustrating Graphify sidebar dashboard, editor diagnostics, and full-screen visualization pages.*
 
-![Graphify Dashboard Preview](https://raw.githubusercontent.com/h3lium4u/TaintFlowPlus/master/resources/screenshots/graphify-preview.png)
-![Diagnostics Highlighting](https://raw.githubusercontent.com/h3lium4u/TaintFlowPlus/master/resources/screenshots/neural-flow.png)
+![Graphify Dashboard Preview](https://files.catbox.moe/tawysg.png)
+![Diagnostics Highlighting](https://files.catbox.moe/x4zrhi.png)
 
 ---
 

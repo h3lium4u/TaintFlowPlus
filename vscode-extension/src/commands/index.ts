@@ -59,7 +59,24 @@ export function registerCommands(context: vscode.ExtensionContext) {
         
         vscode.commands.registerCommand('taintflow.fixAll', async () => {
             const workspaceFolders = vscode.workspace.workspaceFolders;
-            const rootPath = workspaceFolders && workspaceFolders.length > 0 ? workspaceFolders[0].uri.fsPath : undefined;
+            let rootPath: string | undefined;
+            if (workspaceFolders && workspaceFolders.length > 0) {
+                rootPath = workspaceFolders[0].uri.fsPath;
+            } else {
+                for (const uriStr of TaintFlowState.findingsCache.keys()) {
+                    const uri = vscode.Uri.parse(uriStr);
+                    if (uri.scheme === 'file') {
+                        rootPath = path.dirname(uri.fsPath);
+                        break;
+                    }
+                }
+                if (!rootPath) {
+                    const editor = vscode.window.activeTextEditor;
+                    if (editor && editor.document.uri.scheme === 'file') {
+                        rootPath = path.dirname(editor.document.fileName);
+                    }
+                }
+            }
             
             let totalFindingsCount = 0;
             const promptSections: string[] = [];
@@ -68,7 +85,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
                 if (findings.length === 0) continue;
                 
                 const uri = vscode.Uri.parse(uriStr);
-                const relativePath = rootPath ? path.relative(rootPath, uri.fsPath) : uri.fsPath;
+                const relativePath = rootPath ? path.relative(rootPath, uri.fsPath).replace(/\\/g, '/') : uri.fsPath;
                 
                 const findingsText = findings
                     .map(f => `- Line ${f.lineStart}: [${f.severity.toUpperCase()}] ${f.message}`)
@@ -96,7 +113,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
                 promptSections.join('\n\n') +
                 `\n\nPlease update these files to resolve the vulnerabilities securely.`;
 
-            // Write to file if workspace exists
+            // Write to file if a directory path exists
             if (rootPath) {
                 const promptPath = path.join(rootPath, 'fix_prompt.md');
                 const fileContent = `# Fix Request for Antigravity Agent\n\n` +

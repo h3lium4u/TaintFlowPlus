@@ -32,8 +32,13 @@ export async function generateAndShowFixPrompt(document: vscode.TextDocument, fi
 
 export async function writeAntigravityPrompt(document: vscode.TextDocument, fixPrompt: string) {
     const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders || workspaceFolders.length === 0) return;
-    const rootPath = workspaceFolders[0].uri.fsPath;
+    let rootPath: string | undefined;
+    if (workspaceFolders && workspaceFolders.length > 0) {
+        rootPath = workspaceFolders[0].uri.fsPath;
+    } else if (document.uri.scheme === 'file') {
+        rootPath = path.dirname(document.fileName);
+    }
+    if (!rootPath) return;
     const promptPath = path.join(rootPath, 'fix_prompt.md');
 
     const fileContent = `# Fix Request for Antigravity Agent\n\n` +
@@ -52,8 +57,28 @@ export async function writeAntigravityPrompt(document: vscode.TextDocument, fixP
 
 export async function updateAutoFixPromptFile() {
     const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders || workspaceFolders.length === 0) return;
-    const rootPath = workspaceFolders[0].uri.fsPath;
+    let rootPath: string | undefined;
+    if (workspaceFolders && workspaceFolders.length > 0) {
+        rootPath = workspaceFolders[0].uri.fsPath;
+    } else {
+        // Fallback: look for a file on disk in findingsCache to use its directory
+        for (const uriStr of TaintFlowState.findingsCache.keys()) {
+            const uri = vscode.Uri.parse(uriStr);
+            if (uri.scheme === 'file') {
+                rootPath = path.dirname(uri.fsPath);
+                break;
+            }
+        }
+        // If still not found, check the active text editor
+        if (!rootPath) {
+            const activeEditor = vscode.window.activeTextEditor;
+            if (activeEditor && activeEditor.document.uri.scheme === 'file') {
+                rootPath = path.dirname(activeEditor.document.fileName);
+            }
+        }
+    }
+
+    if (!rootPath) return;
     const promptPath = path.join(rootPath, 'fix_prompt.md');
 
     let totalFindingsCount = 0;
@@ -63,7 +88,9 @@ export async function updateAutoFixPromptFile() {
         if (findings.length === 0) continue;
         
         const uri = vscode.Uri.parse(uriStr);
-        const relativePath = path.relative(rootPath, uri.fsPath).replace(/\\/g, '/');
+        const relativePath = uri.scheme === 'file' 
+            ? path.relative(rootPath, uri.fsPath).replace(/\\/g, '/')
+            : uri.fsPath;
         
         const findingsText = findings
             .map(f => `- Line ${f.lineStart}: [${f.severity.toUpperCase()}] ${f.message}`)

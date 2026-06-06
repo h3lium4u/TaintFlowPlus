@@ -1,5 +1,9 @@
 # TaintFlow+
 
+<div align="center">
+  <img src="https://files.catbox.moe/7z8muw.png" width="128" alt="TaintFlow+ Logo" />
+</div>
+
 <h3 align="center">TaintFlow+</h3>
 
 <p align="center">

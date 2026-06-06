@@ -21,7 +21,7 @@ export function showSummaryNotification(totalFindings: number, fileCount: number
 
 export function showMinimalistRiskPopup(totalFindings: number, fileName: string) {
     // Only show if user notifications are enabled in settings
-    const enableToasts = vscode.workspace.getConfiguration('taintflow').get('enableNotificationToasts', true);
+    const enableToasts = vscode.workspace.getConfiguration('taintflow').get('enableNotificationToasts', false);
     if (!enableToasts) return;
 
     vscode.window.showWarningMessage(

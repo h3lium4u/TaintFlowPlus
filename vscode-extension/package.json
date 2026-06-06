@@ -167,7 +167,7 @@
         },
         "taintflow.enableNotificationToasts": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Show a minimalistic notification popup in the bottom right corner when a new security risk is detected."
         },
         "taintflow.mode": {

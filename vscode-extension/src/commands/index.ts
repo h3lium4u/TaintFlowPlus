@@ -236,7 +236,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
             const currentMode = config.get<string>('mode', 'auto');
             const activeModel = TaintFlowState.engine ? TaintFlowState.engine.activeModel : 'None';
             const autoVerifyEnabled = config.get<boolean>('autoVerify', true);
-            const enableNotificationToasts = config.get<boolean>('enableNotificationToasts', true);
+            const enableNotificationToasts = config.get<boolean>('enableNotificationToasts', false);
             const ollamaStatus = TaintFlowState.engine ? TaintFlowState.engine.ollamaAvailable : false;
             const localModel = config.get<string>('localModel', 'auto');
             const ollamaModels = TaintFlowState.engine ? TaintFlowState.engine.ollamaModels : [];

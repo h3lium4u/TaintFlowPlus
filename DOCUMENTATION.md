@@ -91,3 +91,55 @@ TaintFlow+ is configured through the IDE settings (`Ctrl+,` or `Cmd+,`). Below a
 ### Applying Fixes
 *   **Inline Code Actions**: Place your cursor on any highlighted vulnerability.
 *   **Quick Fix**: Click the lightbulb icon (`Ctrl+.` or `Cmd+.`) and select **"TaintFlow+: Explain and Fix Security Issue"** to automatically swap in the secure code recommendation.
+
+---
+
+## 6. Extension Statistics
+
+*   **Total Security Rules Supported**: `60+` built-in static analysis rules.
+*   **Languages Supported**: `14+` languages (including Python, JS/TS, Java, Go, PHP, Ruby, Rust, C#, C/C++, R, SQL, HTML, Dockerfile, and YAML).
+*   **Vulnerability Categories Detected**: `10+` categories (including RCE, SQL Injection, Command Injection, Unsafe Deserialization, Path Traversal/LFI, XSS, SSRF, Hardcoded Secrets, Weak Cryptography, Log Injection, CRLF Injection, Open Redirect, and Container Security).
+*   **AI Providers Supported**: `4` major engine providers (Ollama local models, Google Gemini, Anthropic Claude, and Groq).
+
+---
+
+## 7. Compatibility
+
+*   **Minimum VS Code Version**: `^1.85.0`
+*   **Supported IDEs**:
+    *   Visual Studio Code
+    *   Cursor
+    *   Windsurf
+    *   Antigravity
+
+---
+
+## 8. Commands Reference
+
+Below is the complete list of commands exposed by the extension:
+
+| Command Label | Command ID |
+| :--- | :--- |
+| `TaintFlow+: Verify Current File` | `taintflow.verifyCurrentFile` |
+| `TaintFlow+: Verify All Open Files` | `taintflow.verifyAllOpenFiles` |
+| `TaintFlow+: Show Settings Dashboard` | `taintflow.showStatus` |
+| `TaintFlow+: Enable Auto-Verify` | `taintflow.enableAutoVerify` |
+| `TaintFlow+: Disable Auto-Verify` | `taintflow.disableAutoVerify` |
+| `TaintFlow+: Toggle Auto-Verify` | `taintflow.toggleAutoVerify` |
+| `TaintFlow+: Show Dashboard` | `taintflow.sidebar.focus` |
+| `TaintFlow+: Apply Fix to File` | `taintflow.applyFix` |
+| `TaintFlow+: Fix with Antigravity` | `taintflow.fixFinding` |
+| `TaintFlow+: Copy All Fix Prompts` | `taintflow.fixAll` |
+| `TaintFlow+: Set Groq Key` | `taintflow.configureGroq` |
+| `TaintFlow+: Set Google Key` | `taintflow.configureGoogle` |
+| `TaintFlow+: Set Anthropic Key` | `taintflow.configureAnthropic` |
+| `TaintFlow+: Open File` | `taintflow.openFile` |
+| `Graphify: Open Full Screen Map` | `taintflow.graphify.openFullScreen` |
+| `Graphify: Rebuild Repository Index` | `taintflow.graphify.scanWorkspace` |
+| `Graphify: Generate Repository Context` | `taintflow.graphify.generateContext` |
+| `Graphify: Explain Current File` | `taintflow.graphify.explainFile` |
+| `Graphify: Explain Architecture` | `taintflow.graphify.explainArchitecture` |
+| `Graphify: Copy AI Context` | `taintflow.graphify.copyAIContext` |
+| `Graphify: Copy Repository Map Data` | `taintflow.graphify.copyRepoMap` |
+| `Graphify: Export Context` | `taintflow.graphify.exportContext` |
+| `Graphify: Export Architecture Summary` | `taintflow.graphify.exportArchitecture` |

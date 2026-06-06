@@ -1,0 +1,20 @@
+# YAML Test File for TaintFlow+
+
+# 1. Unsafe Deserialization (yaml-unsafe-deserialization)
+payload: !!python/object/apply:os.system ["id"]
+
+# 2. Kubernetes Privilege Escalation (yaml-k8s-privilege)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-pod
+spec:
+  containers:
+  - name: exploit-container
+    image: alpine
+    securityContext:
+      privileged: true
+
+# 3. Hardcoded secrets (yaml-hardcoded-secrets)
+api_key: "secret-token-value-here"
+password: "my-plain-text-password"

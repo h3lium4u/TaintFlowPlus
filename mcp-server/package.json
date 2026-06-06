@@ -1,19 +1,20 @@
 {
-  "name": "veribuild-mcp",
-  "version": "1.0.0",
-  "type": "module",
+  "name": "taintflow-mcp-server",
+  "version": "1.0.11",
+  "description": "TaintFlow+ MCP server — shared by VS Code, Cursor, and Antigravity",
+  "type": "commonjs",
   "main": "dist/mcp-server/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p ./tsconfig.json",
     "start": "node dist/mcp-server/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
-    "axios": "^1.17.0",
-    "vscode": "file:./vscode-mock"
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "axios": "^1.6.0",
+    "groq-sdk": "^0.9.0"
   },
   "devDependencies": {
-    "typescript": "^6.0.3",
-    "@types/node": "^22.0.0"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   }
 }

@@ -1,4 +1,4 @@
-name: VeriBuild PR Review
+name: TaintFlow+ PR Review
 
 on:
   pull_request:

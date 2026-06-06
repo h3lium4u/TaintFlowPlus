@@ -1,0 +1,580 @@
+{
+  "rules": [
+    {
+      "ruleId": "python-rce",
+      "language": "python",
+      "regex": "\\b(eval|exec|compile|__import__)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Dangerous execution function call detected.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-rce",
+      "language": "javascript",
+      "regex": "\\b(eval|Function|setTimeout|setInterval)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Use of eval or dynamic code compilers.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "java-rce",
+      "language": "java",
+      "regex": "\\b(ScriptEngine\\.eval|Runtime\\.exec|ProcessBuilder)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Dynamic code compile or runtime execution detected.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "php-rce",
+      "language": "php",
+      "regex": "\\b(eval|assert|preg_replace)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Dangerous execution statement or modifier eval.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "ruby-rce",
+      "language": "ruby",
+      "regex": "\\b(eval|instance_eval|class_eval)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Dynamic script eval detected.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "python-sqli",
+      "language": "python",
+      "regex": "\\bexecute\\s*\\(\\s*f['\"].*?\\{.*?\\}|\\bexecute\\s*\\(\\s*['\"].*?%s.*?['\"]\\s*%\\s*\\w+",
+      "severity": "critical",
+      "message": "SQL Injection Risk: Dynamic SQL query execution using string formatting.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-sqli",
+      "language": "javascript",
+      "regex": "\\b(query|raw)\\s*\\(.*(\\+.*|\\$\\{)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: String concatenation or template literal detected in dynamic database query.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "java-sqli",
+      "language": "java",
+      "regex": "\\.executeQuery\\s*\\(.*\\+.*\\)|\\bStatement\\s+\\w+\\s*=\\s*\\w+\\.createStatement\\(\\)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: Use of non-parameterized statement execution with string concatenation.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "php-sqli",
+      "language": "php",
+      "regex": "\\b(mysqli_query|query)\\s*\\(.*(\\.|\\$|\\$_GET|\\$_POST)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: Dynamic string concatenation inside SQL query.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "go-sqli",
+      "language": "go",
+      "regex": "\\b(Query|QueryRow)\\s*\\(.*(\\+|fmt\\.Sprintf)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: SQL query constructed via format template or concat.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "ruby-sqli",
+      "language": "ruby",
+      "regex": "\\.(where|execute)\\s*\\(.*(#\\{)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: ActiveRecord query constructed using dynamic interpolation.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "rust-sqli",
+      "language": "rust",
+      "regex": "\\b(query|query_as)\\s*\\(.*(format!)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: SQLx query formatting macro detected.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "csharp-sqli",
+      "language": "csharp",
+      "regex": "\\b(FromSqlRaw|SqlCommand)\\s*\\(.*(\\+|\\$)",
+      "severity": "critical",
+      "message": "SQL Injection Risk: EF core raw SQL or SqlCommand string concatenation.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "python-cmd-inj",
+      "language": "python",
+      "regex": "\\b(os\\.system|subprocess\\.call|subprocess\\.Popen|os\\.popen)\\b|shell\\s*=\\s*True",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Invoking dynamic shell executing environment.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-cmd-inj",
+      "language": "javascript",
+      "regex": "\\bchild_process\\.(exec|execSync|spawn)\\b",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Executing shell command interface.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "java-cmd-inj",
+      "language": "java",
+      "regex": "\\bRuntime\\.getRuntime\\(\\)\\.exec\\b|\\bnew\\s+ProcessBuilder\\b",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Spawning subprocesses with dynamic input vectors.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "php-cmd-inj",
+      "language": "php",
+      "regex": "\\b(shell_exec|system|exec|passthru)\\b",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Interactive system shell call.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "go-cmd-inj",
+      "language": "go",
+      "regex": "\\bexec\\.Command\\b",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Dynamic executable execution.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "ruby-cmd-inj",
+      "language": "ruby",
+      "regex": "`.*?#\\{.*?\\}.*?`|\\bsystem\\s*\\(.*#\\{",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Shell command construction with dynamic interpolation.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "rust-cmd-inj",
+      "language": "rust",
+      "regex": "\\bCommand::new\\s*\\(\\s*(?!&?['\"])\\w+|\\.arg(?:s)?\\s*\\(\\s*(?!&?['\"])\\w+",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Command spawned with dynamic variable arguments.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "python-deserialization",
+      "language": "python",
+      "regex": "\\b(pickle\\.loads|pickle\\.load|yaml\\.load|torch\\.load)\\b",
+      "severity": "critical",
+      "message": "Unsafe Deserialization Risk: Reconstructing serialized objects can run arbitrary code.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "java-deserialization",
+      "language": "java",
+      "regex": "\\b(ObjectInputStream\\.readObject|XmlDecoder\\.readObject)\\b",
+      "severity": "critical",
+      "message": "Unsafe Deserialization Risk: Deserialization of arbitrary streams can lead to remote code execution.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "php-deserialization",
+      "language": "php",
+      "regex": "\\b(unserialize|unserialize_callback_func)\\b",
+      "severity": "critical",
+      "message": "Unsafe Deserialization Risk: PHP Object Injection vulnerability.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "ruby-deserialization",
+      "language": "ruby",
+      "regex": "\\b(Marshal\\.load|YAML\\.load)\\b",
+      "severity": "critical",
+      "message": "Unsafe Deserialization Risk: Marshalling or unsafe YAML loaders.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "python-path-traversal",
+      "language": "python",
+      "regex": "\\bopen\\s*\\(\\s*f['\"].*?\\{.*?\\}|\\bopen\\s*\\(\\s*(?!['\"])\\w+",
+      "severity": "critical",
+      "message": "Path Traversal Risk: Opening files dynamically with user input.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-path-traversal",
+      "language": "javascript",
+      "regex": "\\bfs\\.(readFileSync|createReadStream|writeFile|writeFileSync)\\b",
+      "severity": "critical",
+      "message": "Path Traversal Risk: Accessing file system via dynamic paths.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "java-path-traversal",
+      "language": "java",
+      "regex": "\\bnew\\s+(FileInputStream|FileReader|File)\\b|\\bFiles\\.readAllBytes\\b",
+      "severity": "critical",
+      "message": "Path Traversal Risk: Instantiating filesystem loaders with variables.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "php-path-traversal",
+      "language": "php",
+      "regex": "\\b(include|require|file_get_contents|file_put_contents)\\b",
+      "severity": "critical",
+      "message": "Path Traversal / Local File Inclusion Risk: Loading dynamic files from variable sources.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "go-path-traversal",
+      "language": "go",
+      "regex": "\\b(ioutil\\.ReadFile|os\\.Open)\\b",
+      "severity": "critical",
+      "message": "Path Traversal Risk: dynamic file access using parameters.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "rust-path-traversal",
+      "language": "rust",
+      "regex": "\\bfs::(?:read|read_to_string|File::open)\\s*\\(\\s*(?!&?['\"])\\w+",
+      "severity": "critical",
+      "message": "Path Traversal Risk: File read method executed using dynamic path variable.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "csharp-path-traversal",
+      "language": "csharp",
+      "regex": "\\bFile\\.(ReadAllText|OpenRead)\\b",
+      "severity": "critical",
+      "message": "Path Traversal Risk: Opening filesystem components dynamically.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-xss",
+      "language": "javascript",
+      "regex": "\\b(innerHTML|outerHTML|document\\.write|insertAdjacentHTML|dangerouslySetInnerHTML)\\b",
+      "severity": "high",
+      "message": "XSS (Cross-Site Scripting) Risk: Raw insertion of untrusted string into DOM element.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "angular-xss",
+      "language": "javascript",
+      "regex": "\\b(bypassSecurityTrustHtml|bypassSecurityTrustUrl|bypassSecurityTrustScript)\\b",
+      "severity": "high",
+      "message": "XSS Risk: Explicitly bypassing security trust constraints in Angular.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "vue-xss",
+      "language": "javascript",
+      "regex": "v-html\\s*=|\\.\\$refs\\..*?\\.innerHTML",
+      "severity": "high",
+      "message": "XSS Risk: Raw HTML render directive v-html in Vue template.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "html-xss",
+      "language": "html",
+      "regex": "<script\\s+[^>]*src\\s*=|\\bonload\\s*=|\\bonerror\\s*=",
+      "severity": "high",
+      "message": "XSS Risk: Dynamic inline event handlers or scripts.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "php-xss",
+      "language": "php",
+      "regex": "\\b(echo|print)\\b\\s+(?!\\bhtmlspecialchars\\b)(?!\\bhtmlentities\\b)\\$",
+      "severity": "high",
+      "message": "XSS Risk: echo/print outputs raw variable directly without escaping.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "python-ssrf",
+      "language": "python",
+      "regex": "\\b(requests\\.get|requests\\.post|urllib\\.request\\.urlopen|httpx\\.get)\\b",
+      "severity": "high",
+      "message": "SSRF (Server-Side Request Forgery) Risk: Loading external URLs dynamically.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "javascript-ssrf",
+      "language": "javascript",
+      "regex": "\\b(fetch|axios\\.get|axios\\.post|http\\.get|https\\.get)\\b",
+      "severity": "high",
+      "message": "SSRF Risk: Network connection targets dynamic URL parameter.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "java-ssrf",
+      "language": "java",
+      "regex": "\\b(HttpClient\\.send|URL\\.openStream)\\b",
+      "severity": "high",
+      "message": "SSRF Risk: Server requests network resources directly.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "go-ssrf",
+      "language": "go",
+      "regex": "\\b(http\\.Get|client\\.Do)\\b",
+      "severity": "high",
+      "message": "SSRF Risk: Web request target controlled by parameters.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "php-ssrf",
+      "language": "php",
+      "regex": "\\b(file_get_contents|curl_exec)\\b",
+      "severity": "high",
+      "message": "SSRF Risk: File or CURL resource retrieved using variables.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "ruby-ssrf",
+      "language": "ruby",
+      "regex": "\\b(Net::HTTP\\.get|open)\\b",
+      "severity": "high",
+      "message": "SSRF Risk: URL client requests dynamic endpoints.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "all-hardcoded-secrets",
+      "language": "all",
+      "regex": "sk_live_[a-zA-Z0-9]{24}|sk_test_[a-zA-Z0-9]{24}|AIzaSy[a-zA-Z0-9_-]{33}|ghp_[a-zA-Z0-9]{36}|xox[b-p]-[a-zA-Z0-9-]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN RSA PRIVATE KEY-----|password\\s*=\\s*['\"][^'\"]+['\"]|api[_-]?key\\s*=\\s*['\"][^'\"]+['\"]|secret\\s*=\\s*['\"][^'\"]+['\"]|token\\s*=\\s*['\"][^'\"]+['\"]",
+      "severity": "high",
+      "message": "Hardcoded Secrets: Potential private key, API token, or secret credentials.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "all-weak-crypto",
+      "language": "all",
+      "regex": "\\b(md5|sha1|DES|RC4)\\b|MessageDigest\\.getInstance\\(\"(MD5|SHA-1)\"\\)|createHash\\('(md5|sha1)'\\)",
+      "severity": "high",
+      "message": "Weak Cryptography: MD5, SHA-1, DES or RC4 encryption detected.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "all-log-injection",
+      "language": "all",
+      "regex": "\\b(log|logging|console)\\.(info|error|warn|debug|log|Printf|println)\\b\\s*\\(.*\\+.*\\)",
+      "severity": "medium",
+      "message": "Log Injection Risk: Outputting unescaped dynamic parameters into application log structures.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "nosql-injection",
+      "language": "javascript",
+      "regex": "\\$where|\\$regex|BasicDBObject",
+      "severity": "medium",
+      "message": "NoSQL Injection Risk: Use of dynamic conditions inside NoSQL queries.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "xxe-injection",
+      "language": "java",
+      "regex": "DocumentBuilderFactory|xml\\.etree\\.ElementTree|simplexml_load_string|XmlDocument",
+      "severity": "medium",
+      "message": "XXE Injection Risk: Parsers should disable external entity processing.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "crlf-injection",
+      "language": "all",
+      "regex": "\\.setHeader\\(|header\\(|response\\.headers",
+      "severity": "medium",
+      "message": "CRLF Injection / HTTP Header Injection: Setting dynamic response headers.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "open-redirect",
+      "language": "all",
+      "regex": "\\b(redirect|res\\.redirect|HttpResponseRedirect)\\b\\s*\\(",
+      "severity": "medium",
+      "message": "Open Redirect Risk: Setting navigation target dynamically.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "debug-mode-on",
+      "language": "all",
+      "regex": "\\bDEBUG\\s*=\\s*True\\b|\\bdebug\\s*=\\s*True\\b|app\\.set\\('env',\\s*'development'\\)|display_errors\\s*,\\s*1|spring\\.profiles\\.active\\s*=\\s*dev",
+      "severity": "low",
+      "message": "Security Warning: Debug configurations active.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "verbose-errors",
+      "language": "all",
+      "regex": "traceback\\.format_exc\\(\\)|errorHandler",
+      "severity": "low",
+      "message": "Security Warning: Stack traces and detailed exception context exposed.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "commented-keys",
+      "language": "all",
+      "regex": "TODO:\\s+change\\s+key|//\\s*secret\\s*=\\s*['\"]|#\\s*password\\s*=\\s*\\w+",
+      "severity": "low",
+      "message": "Commented Key Warning: Developer comments may disclose secret placeholder keys.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "csharp-cmd-inj",
+      "language": "csharp",
+      "regex": "\\bProcess\\.Start\\b",
+      "severity": "critical",
+      "message": "Command Injection Risk: Spawning subprocesses or shell executes with dynamic parameter builders.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "sql-xp-cmdshell",
+      "language": "sql",
+      "regex": "\\bxp_cmdshell\\b",
+      "severity": "critical",
+      "message": "SQL Command Execution Risk: Invoking xp_cmdshell allows remote command execution.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "sql-no-where",
+      "language": "sql",
+      "regex": "\\b(UPDATE|DELETE)\\b\\s+(?!.*?\\bWHERE\\b)",
+      "severity": "critical",
+      "message": "Dangerous SQL: UPDATE or DELETE statement without a WHERE clause can modify or delete all rows.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "html-script-http",
+      "language": "html",
+      "regex": "<script\\s+[^>]*src\\s*=\\s*['\"]http://",
+      "severity": "high",
+      "message": "Insecure Resource Loading: Loading scripts over insecure HTTP protocol.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "html-form-http",
+      "language": "html",
+      "regex": "<form\\s+[^>]*action\\s*=\\s*['\"]http://",
+      "severity": "medium",
+      "message": "Insecure Form Action: Form submissions targeted to insecure HTTP endpoint.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "rust-unsafe-block",
+      "language": "rust",
+      "regex": "\\bunsafe\\s*\\{",
+      "severity": "medium",
+      "message": "Rust Unsafe Block: Use of unsafe code blocks should be minimized and audited.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "r-rce",
+      "language": "r",
+      "regex": "\\b(eval|parse|system|system2|shell)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Arbitrary Code Execution Risk: Dynamic code parsing or system execution command detected.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "r-path-traversal",
+      "language": "r",
+      "regex": "\\b(read\\.csv|read\\.table|write\\.csv|write\\.table|load|save|readLines|writeLines)\\b\\s*\\(.*?(?!['\"])\\w+",
+      "severity": "critical",
+      "message": "Path Traversal Risk: File operations using dynamic variable paths.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "r-weak-ssl",
+      "language": "r",
+      "regex": "ssl_verifypeer\\s*=\\s*(?:FALSE|0)",
+      "severity": "high",
+      "message": "Insecure Transport: Disabling SSL certificate validation in HTTP connection.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "yaml-unsafe-deserialization",
+      "language": "yaml",
+      "regex": "!!python/object/apply|!!python/object/new|!!python/object|!unsafe|!load",
+      "severity": "critical",
+      "message": "YAML Unsafe Deserialization: Found tags indicating potential arbitrary code execution on deserialization.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "yaml-k8s-privilege",
+      "language": "yaml",
+      "regex": "privileged:\\s*true|hostNetwork:\\s*true|hostPID:\\s*true",
+      "severity": "high",
+      "message": "Kubernetes Privilege Escalation: Pod configuration enables host access or privileged execution.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "yaml-hardcoded-secrets",
+      "language": "yaml",
+      "regex": "(api_key|password|secret|token|passphrase):\\s*['\"][a-zA-Z0-9_-]+['\"]",
+      "severity": "high",
+      "message": "Hardcoded Secret: Plaintext sensitive credentials found in configuration.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "cpp-buffer-overflow",
+      "language": "cpp",
+      "regex": "\\b(strcpy|strcat|sprintf|vsprintf|gets)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "Buffer Overflow Risk: Use of unsafe string function without boundary verification.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "cpp-cmd-inj",
+      "language": "cpp",
+      "regex": "\\b(system|popen|execvp|execlp|execle|execv|execl)\\b\\s*\\(",
+      "severity": "critical",
+      "message": "OS Command Injection Risk: Invoking OS shell or command execution with potential unvalidated arguments.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "cpp-integer-overflow",
+      "language": "cpp",
+      "regex": "\\b(malloc|calloc|realloc)\\b\\s*\\(\\s*\\w+\\s*[\\*+]\\s*\\w+\\s*\\)",
+      "severity": "high",
+      "message": "Integer Overflow to Buffer Overflow: Direct multiplication or addition inside allocation functions can cause overflow.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "cpp-format-string",
+      "language": "cpp",
+      "regex": "\\b(printf|fprintf|sprintf|snprintf)\\b\\s*\\(\\s*(?!['\"])\\w+\\s*\\)",
+      "severity": "critical",
+      "message": "Format String Vulnerability: Directly passing non-constant/user-controlled variable as format string.",
+      "requiresAST": true
+    },
+    {
+      "ruleId": "dockerfile-root-user",
+      "language": "dockerfile",
+      "regex": "^\\s*USER\\s+root\\b",
+      "severity": "medium",
+      "message": "Security Best Practice: Running container with root permissions increases vulnerability impact.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "dockerfile-curl-sh",
+      "language": "dockerfile",
+      "regex": "curl\\s+.*?\\|\\s*(?:bash|sh)\\b",
+      "severity": "high",
+      "message": "Remote Code Execution Risk: Downloading and executing untrusted scripts directly from the internet.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "dockerfile-add-instruction",
+      "language": "dockerfile",
+      "regex": "^\\s*ADD\\s+",
+      "severity": "low",
+      "message": "Security Best Practice: Prefer COPY over ADD unless extracting local archives or remote URLs.",
+      "requiresAST": false
+    },
+    {
+      "ruleId": "dockerfile-expose-ssh",
+      "language": "dockerfile",
+      "regex": "EXPOSE\\s+22\\b",
+      "severity": "high",
+      "message": "Security Risk: Exposing SSH port 22 inside containers increases attack surface.",
+      "requiresAST": false
+    }
+  ]
+}

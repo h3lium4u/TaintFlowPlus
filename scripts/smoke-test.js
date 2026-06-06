@@ -9,7 +9,7 @@ Module.prototype.require = function(id) {
       workspace: {
         getConfiguration: (section) => ({
           get: (key, defaultValue) => {
-            const envKey = `VERIBUILD_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
+            const envKey = `TAINTFLOW_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
             const envVal = process.env[envKey];
             if (envVal !== undefined) {
               try { return JSON.parse(envVal); } catch { return envVal; }
@@ -32,21 +32,21 @@ Module.prototype.require = function(id) {
   return originalRequire.apply(this, arguments);
 };
 
-// 2. Compile veribuild-core.ts to CommonJS for script environment compatibility
+// 2. Compile taintflow-core.ts to CommonJS for script environment compatibility
 try {
-  console.log('Compiling veribuild-core.ts...');
-  execSync('npx tsc src/veribuild-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
+  console.log('Compiling taintflow-core.ts...');
+  execSync('npx tsc src/taintflow-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
 } catch (err) {
   console.warn('Compilation warnings/errors encountered.');
 }
 
-const { VeriBuildEngine } = require('../out/veribuild-core.js');
+const { TaintFlowEngine } = require('../out/taintflow-core.js');
 
 const mockContext = {
   secrets: {
     get: async (key) => {
       const envKey = key.toUpperCase().replace(/\./g, '_');
-      return process.env[envKey] || process.env[envKey.replace('VERIBUILD_', '')];
+      return process.env[envKey] || process.env[envKey.replace('TAINTFLOW_', '')];
     },
     store: async () => {},
     delete: async () => {}
@@ -58,7 +58,7 @@ const mockOutputChannel = {
 };
 
 async function run() {
-  const engine = new VeriBuildEngine(mockContext, mockOutputChannel);
+  const engine = new TaintFlowEngine(mockContext, mockOutputChannel);
   await engine.initialize();
 
   const testCode = `
@@ -72,12 +72,12 @@ async function run() {
     eval("const test = 1;"); // eval usage
   `;
 
-  console.log("Running VeriBuild engine analysis...");
+  console.log("Running TaintFlow+ engine analysis...");
   const findings = await engine.analyzeCode(testCode, 'smoke-test-file.js');
   
   console.log("\n--- Verification Report ---");
   if (findings.length === 0) {
-    console.log("❌ No findings detected (Verify static analysis regexes in src/veribuild-core.ts)");
+    console.log("❌ No findings detected (Verify static analysis regexes in src/taintflow-core.ts)");
   } else {
     console.log(`✅ Success! Detected ${findings.length} findings:`);
     findings.forEach((f, idx) => {

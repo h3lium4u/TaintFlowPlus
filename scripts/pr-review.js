@@ -13,7 +13,7 @@ Module.prototype.require = function(id) {
       workspace: {
         getConfiguration: (section) => ({
           get: (key, defaultValue) => {
-            const envKey = `VERIBUILD_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
+            const envKey = `TAINTFLOW_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
             const envVal = process.env[envKey];
             if (envVal !== undefined) {
               try { return JSON.parse(envVal); } catch { return envVal; }
@@ -39,14 +39,14 @@ Module.prototype.require = function(id) {
 // Ensure root typescript compilation is done before requiring core module
 try {
   core.info('Compiling TypeScript files...');
-  execSync('npx tsc src/veribuild-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
+  execSync('npx tsc src/taintflow-core.ts --module CommonJS --outDir out --ignoreDeprecations 6.0 --ignoreConfig', { stdio: 'inherit' });
 } catch (err) {
   core.error('TypeScript compilation warning/error: ' + err.message);
 }
 
 async function run() {
   try {
-    const { VeriBuildEngine } = require('../out/veribuild-core.js');
+    const { TaintFlowEngine } = require('../out/taintflow-core.js');
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
       core.setFailed('Missing GITHUB_TOKEN environment variable');
@@ -80,12 +80,12 @@ async function run() {
       return;
     }
 
-    // Mock VS Code Context for VeriBuildEngine
+    // Mock VS Code Context for TaintFlowEngine
     const mockContext = {
       secrets: {
         get: async (key) => {
           const envKey = key.toUpperCase().replace(/\./g, '_');
-          return process.env[envKey] || process.env[envKey.replace('VERIBUILD_', '')];
+          return process.env[envKey] || process.env[envKey.replace('TAINTFLOW_', '')];
         },
         store: async () => {},
         delete: async () => {}
@@ -93,10 +93,10 @@ async function run() {
     };
 
     const mockOutputChannel = {
-      appendLine: (value) => console.log(`[VeriBuildEngine] ${value}`)
+      appendLine: (value) => console.log(`[TaintFlowEngine] ${value}`)
     };
 
-    const engine = new VeriBuildEngine(mockContext, mockOutputChannel);
+    const engine = new TaintFlowEngine(mockContext, mockOutputChannel);
     await engine.initialize();
 
     const allFindings = [];
@@ -117,7 +117,7 @@ async function run() {
     core.info(`Analysis complete. Found ${allFindings.length} findings.`);
 
     // Build comment body
-    let commentBody = '## 🔍 VeriBuild AI Code Quality and Security Analysis\n\n';
+    let commentBody = '## 🔍 TaintFlow+ AI Code Quality and Security Analysis\n\n';
     if (allFindings.length === 0) {
       commentBody += '✅ No security or quality issues were identified in the changed files.';
     } else {

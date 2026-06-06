@@ -1,45 +1,58 @@
-# Ignore everything except the compiled output
+# TaintFlow+ .vscodeignore — controls what goes in the VSIX
 
-# Source files (don't need in production)
+# Source TypeScript (not needed in production; compiled JS is in out/)
 src/
 *.ts
 tsconfig.json
 
-# Test files
+# Tests & dev scripts
 test.js
+test.py
 test-vulns.js
-
-# Git files
-.git/
-.gitignore
-
-# Node modules (will be installed separately)
-node_modules/
-**/node_modules/
-
-# MCP server (separate deployment)
-mcp-server/
-**/mcp-server/
-
-# OXP server (separate deployment)
-oxp-server/
-**/oxp-server/
-
-# Scripts
+verify.js
+vuln_test.py
 scripts/
 
-# GitHub workflows
+# Separate deployment artifacts (not part of extension)
+mcp-server/
+oxp-server/
+antigravity-skill/
+core/
+vscode-extension/
+
+# Version control & CI
+.git/
+.gitignore
 .github/
 
-# VS Code workspace files
+# IDE config dirs
 .vscode/
+.cursor/
+.antigravity/
 
-# Logs and temp files
+# Env & logs
+.env
 *.log
 *.tmp
 
-# Only include the compiled output and essential files
+# Old VSIX files
+*.vsix
+
+# Markdown artifacts
+*.md
+vulnerabilities-report.md
+antigravity_fix_prompt.md
+activation_debug.log
+
+# Test reports
+test-report.txt
+test-json.json
+
+# node_modules will be bundled by vsce --no-dependencies flag
+node_modules/
+
+# Always include these:
 !out/
 !package.json
+!syntaxes/
 !LICENSE
-!README.md

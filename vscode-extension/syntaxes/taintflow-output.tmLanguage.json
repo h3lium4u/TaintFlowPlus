@@ -1,0 +1,110 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "TaintFlow+ Output",
+  "scopeName": "text.taintflow.output",
+  "patterns": [
+    {
+      "include": "#blue-run-block"
+    },
+    {
+      "include": "#green-run-block"
+    },
+    {
+      "include": "#general"
+    }
+  ],
+  "repository": {
+    "blue-run-block": {
+      "begin": "^█\\s+TAINTFLOW ANALYSIS #\\d+ \\[BLUE RUN\\].*",
+      "beginCaptures": {
+        "0": { "name": "keyword.control" }
+      },
+      "end": "^─{80}$",
+      "endCaptures": {
+        "0": { "name": "comment" }
+      },
+      "patterns": [
+        {
+          "match": "(?i)\\b(eval|sql injection|command injection|xss|hardcoded|pickle|exec)\\b",
+          "name": "invalid.illegal"
+        },
+        {
+          "match": "❌|🔴 Critical|🟠 High|Critical|High",
+          "name": "invalid.illegal"
+        },
+        {
+          "match": "⚠️|🟡 Medium|🔵 Low|Medium|Low|Warning",
+          "name": "constant.numeric"
+        },
+        {
+          "match": "✅ No vulnerabilities found\\.",
+          "name": "string"
+        },
+        {
+          "match": "📁 File:.*",
+          "name": "support.class"
+        },
+        {
+          "match": "████████████████████████████████████████████████████████████████████████████████",
+          "name": "comment"
+        },
+        {
+          "match": ".*",
+          "name": "keyword.control"
+        }
+      ]
+    },
+    "green-run-block": {
+      "begin": "^█\\s+TAINTFLOW ANALYSIS #\\d+ \\[GREEN RUN\\].*",
+      "beginCaptures": {
+        "0": { "name": "string" }
+      },
+      "end": "^─{80}$",
+      "endCaptures": {
+        "0": { "name": "comment" }
+      },
+      "patterns": [
+        {
+          "match": "(?i)\\b(eval|sql injection|command injection|xss|hardcoded|pickle|exec)\\b",
+          "name": "invalid.illegal"
+            },
+            {
+              "match": "❌|🔴 Critical|🟠 High|Critical|High",
+              "name": "invalid.illegal"
+            },
+            {
+              "match": "⚠️|🟡 Medium|🔵 Low|Medium|Low|Warning",
+              "name": "constant.numeric"
+            },
+            {
+              "match": "✅ No vulnerabilities found\\.",
+              "name": "string"
+            },
+            {
+              "match": "📁 File:.*",
+              "name": "support.class"
+            },
+            {
+              "match": "████████████████████████████████████████████████████████████████████████████████",
+              "name": "comment"
+            },
+            {
+              "match": ".*",
+              "name": "string"
+            }
+          ]
+        },
+        "general": {
+          "patterns": [
+            {
+              "match": "████████████████████████████████████████████████████████████████████████████████",
+              "name": "comment"
+            },
+            {
+              "match": "─{80}",
+              "name": "comment"
+            }
+          ]
+        }
+      }
+    }

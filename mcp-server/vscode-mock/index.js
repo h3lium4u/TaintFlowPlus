@@ -2,7 +2,7 @@ module.exports = {
   workspace: {
     getConfiguration: (section) => ({
       get: (key, defaultValue) => {
-        const envKey = `VERIBUILD_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
+        const envKey = `TAINTFLOW_${section ? section.toUpperCase() + '_' : ''}${key.toUpperCase().replace(/\./g, '_')}`;
         const envVal = process.env[envKey];
         if (envVal !== undefined) {
           try {

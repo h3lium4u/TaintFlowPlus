@@ -1,38 +1,54 @@
 import express from 'express';
-import { VeriBuildEngine } from '../src/veribuild-core.js';
+import { TaintFlowEngine, SecretStorage, Settings } from '../core/taintflow-engine.js';
 
-class MockSecretStorage {
+class EnvSecretStorage implements SecretStorage {
   async get(key: string): Promise<string | undefined> {
-    const envKey = key.toUpperCase().replace(/\./g, '_');
-    return process.env[envKey] || process.env[envKey.replace('VERIBUILD_', '')];
+    const cleanKey = key.replace('taintflow.', '').replace('.api_key', '').toUpperCase() + '_API_KEY';
+    return process.env[cleanKey] || process.env[cleanKey.replace('TAINTFLOW_', '')];
   }
-  async store(key: string, value: string): Promise<void> {}
-  async delete(key: string): Promise<void> {}
+  async store(key: string, value: string): Promise<void> {
+    const cleanKey = key.replace('taintflow.', '').replace('.api_key', '').toUpperCase() + '_API_KEY';
+    process.env[cleanKey] = value;
+  }
 }
 
-const mockSecrets = new MockSecretStorage();
-const mockContext: any = {
-  secrets: mockSecrets
-};
+class EnvSettings implements Settings {
+  get<T>(key: string, defaultValue?: T): T {
+    const envValName = key.replace(/\./g, '_').toUpperCase();
+    if (process.env[envValName] !== undefined) {
+      return process.env[envValName] as any;
+    }
+    if (key === 'providers') {
+      return { google: true, groq: true, anthropic: true } as any;
+    }
+    if (key.endsWith('.priority')) {
+      const provider = key.split('.')[0];
+      if (provider === 'google') return 10 as any;
+      if (provider === 'groq') return 20 as any;
+      if (provider === 'anthropic') return 30 as any;
+    }
+    return defaultValue as T;
+  }
+}
 
-const mockOutputChannel: any = {
-  appendLine: (value: string) => {
-    console.log(`[VeriBuildEngine] ${value}`);
+const loggerShim = {
+  appendLine: (msg: string) => {
+    console.log(`[TaintFlow+ Engine] ${msg}`);
   }
 };
 
-const engine = new VeriBuildEngine(mockContext, mockOutputChannel);
+const engine = new TaintFlowEngine(new EnvSecretStorage(), new EnvSettings(), loggerShim);
 
 const app = express();
 app.use(express.json());
 
-// GET /health returns { status: 'ok', ollama: boolean }
 app.get('/health', async (req, res) => {
   try {
     await engine.initialize();
     res.json({
       status: 'ok',
-      ollama: engine.ollamaAvailable
+      ollama: engine.ollamaAvailable,
+      activeModel: engine.activeModel
     });
   } catch (error) {
     res.status(500).json({
@@ -43,7 +59,6 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// POST /verify expects JSON { code, filePath }, returns { findings: [...] }
 app.post('/verify', async (req, res) => {
   const { code, filePath } = req.body;
   if (typeof code !== 'string') {
@@ -62,5 +77,5 @@ app.post('/verify', async (req, res) => {
 
 const port = process.env.PORT || 9876;
 app.listen(port, () => {
-  console.log(`VeriBuild HTTP server listening on port ${port}`);
+  console.log(`TaintFlow+ HTTP server listening on port ${port}`);
 });

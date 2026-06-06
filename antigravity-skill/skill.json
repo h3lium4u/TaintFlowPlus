@@ -1,0 +1,29 @@
+{
+  "name": "taintflow-mcp",
+  "version": "1.0.11",
+  "description": "TaintFlow+ Code Verification MCP Skill",
+  "main": "dist/antigravity-skill/server.js",
+  "commands": {
+    "start": "node dist/antigravity-skill/server.js"
+  },
+  "tools": [
+    {
+      "name": "verify_code",
+      "description": "Verify AI-generated code for security vulnerabilities and code quality issues",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The source code to analyze"
+          },
+          "filePath": {
+            "type": "string",
+            "description": "Optional file path or name (e.g. index.js) to assist with context"
+          }
+        },
+        "required": ["code"]
+      }
+    }
+  ]
+}

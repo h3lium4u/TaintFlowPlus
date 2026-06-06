@@ -1,0 +1,34 @@
+# Source & build artifacts
+src/
+tsconfig.json
+*.ts
+*.map
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Output vsix files
+*.vsix
+
+# Tests & scripts
+test/
+test-files/
+scripts/
+*.test.js
+*.spec.js
+
+# Dev configs
+.vscode/
+.vscodeignore
+.gitignore
+.env
+
+# Docs (not needed in package)
+CONTRIBUTING.md
+CHANGELOG.md
+ROADMAP.md
+SECURITY.md
+SECURITY_RULES.md
+PRIVACY.md
+fix_prompt.md

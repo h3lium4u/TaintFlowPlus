@@ -1,45 +1,27 @@
 {
-  "name": "veribuild",
-  "version": "1.0.0",
-  "description": "",
-  "main": "out/extension.js",
-  "publisher": "veribuild",
+  "name": "taintflow-monorepo",
+  "version": "1.0.11",
+  "description": "TaintFlow+ Monorepo Root — Security static analysis and AI verification suite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/veribuild/veribuild.git"
+    "url": "https://github.com/h3lium4u/TaintFlowPlus.git"
   },
-  "engines": {
-    "vscode": "^1.85.0"
+  "bugs": {
+    "url": "https://github.com/h3lium4u/TaintFlowPlus/issues"
   },
-  "activationEvents": [
-    "onLanguage:javascript",
-    "onLanguage:typescript",
-    "onLanguage:python",
-    "onCommand:veribuild.verifyCurrentFile"
-  ],
-  "contributes": {
-    "commands": [
-      {
-        "command": "veribuild.verifyCurrentFile",
-        "title": "VeriBuild: Verify Current File"
-      },
-      {
-        "command": "veribuild.configureGroq",
-        "title": "VeriBuild: Configure Groq Key"
-      }
-    ]
+  "homepage": "https://github.com/h3lium4u/TaintFlowPlus",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "setup-mcp": "node scripts/setup-mcp.js",
+    "test": "node scripts/run-tests.js"
   },
-  "type": "commonjs",
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "@types/vscode": "^1.85.0",
-    "typescript": "^6.0.3"
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@actions/core": "^3.0.1",
-    "@actions/github": "^9.1.1",
-    "axios": "^1.17.0",
-    "chokidar": "^5.0.0",
-    "groq-sdk": "^1.2.1"
+    "axios": "^1.6.0",
+    "groq-sdk": "^0.9.0"
   }
 }

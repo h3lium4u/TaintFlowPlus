@@ -1,0 +1,20 @@
+{
+  "name": "taintflow-mcp-antigravity",
+  "version": "1.0.11",
+  "description": "TaintFlow+ MCP server for Antigravity IDE integration",
+  "type": "module",
+  "main": "./dist/antigravity-skill/server.js",
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "start": "node ./dist/antigravity-skill/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "axios": "^1.6.0",
+    "groq-sdk": "^0.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

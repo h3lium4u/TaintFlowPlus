@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test HTML</title>
+</head>
+<body>
+    <!-- 1. Vulnerable Inline Event / Script Injection -->
+    <div onclick="eval(userInput)">Click me</div>
+    
+    <!-- 2. Vulnerable HTTP link -->
+    <script src="http://example.com/untrusted.js"></script>
+    
+    <!-- 3. Form action using HTTP -->
+    <form action="http://insecure-login.com">
+        <input type="text" name="user">
+    </form>
+
+    <!-- Safe Alternatives -->
+    <div id="safe-btn">Click me safely</div>
+    <script src="https://example.com/trusted.js" integrity="sha384-..."></script>
+</body>
+</html>

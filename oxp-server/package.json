@@ -1,20 +1,20 @@
 {
-  "name": "veribuild-oxp",
-  "version": "1.0.0",
+  "name": "taintflow-oxp",
+  "version": "1.0.11",
   "type": "module",
   "main": "dist/oxp-server/server.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p ./tsconfig.json",
     "start": "node dist/oxp-server/server.js"
   },
   "dependencies": {
     "express": "^4.21.1",
     "axios": "^1.17.0",
-    "vscode": "file:./vscode-mock"
+    "groq-sdk": "^0.9.0"
   },
   "devDependencies": {
-    "typescript": "^6.0.3",
-    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
     "@types/express": "^5.0.0"
   }
 }

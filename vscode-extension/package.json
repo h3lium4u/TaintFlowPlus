@@ -1,0 +1,301 @@
+{
+  "name": "taintflow-plus",
+  "displayName": "TaintFlow+ v1",
+  "description": "AI-Powered Security Verification & Repository Intelligence",
+  "version": "1.0.11",
+  "publisher": "F1ZZ4N",
+  "icon": "resources/shield.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/h3lium4u/TaintFlowPlus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/h3lium4u/TaintFlowPlus/issues"
+  },
+  "homepage": "https://github.com/h3lium4u/TaintFlowPlus",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Security"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:java",
+    "onLanguage:python",
+    "onLanguage:sql",
+    "onLanguage:php",
+    "onLanguage:go",
+    "onLanguage:rust",
+    "onLanguage:ruby",
+    "onLanguage:json",
+    "onLanguage:csharp",
+    "onLanguage:html",
+    "onLanguage:r",
+    "onLanguage:yaml",
+    "onLanguage:c",
+    "onLanguage:cpp",
+    "onLanguage:dockerfile",
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "taintflow-output",
+        "aliases": [
+          "TaintFlow+ Output"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "taintflow-output",
+        "scopeName": "text.taintflow.output",
+        "path": "./syntaxes/taintflow-output.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "taintflow.verifyCurrentFile",
+        "title": "TaintFlow+: Verify Current File"
+      },
+      {
+        "command": "taintflow.verifyAllOpenFiles",
+        "title": "TaintFlow+: Verify All Open Files"
+      },
+      {
+        "command": "taintflow.configureGroq",
+        "title": "TaintFlow+: Set Groq Key"
+      },
+      {
+        "command": "taintflow.configureGoogle",
+        "title": "TaintFlow+: Set Google Key"
+      },
+      {
+        "command": "taintflow.configureAnthropic",
+        "title": "TaintFlow+: Set Anthropic Key"
+      },
+      {
+        "command": "taintflow.enableAutoVerify",
+        "title": "TaintFlow+: Enable Auto-Verify"
+      },
+      {
+        "command": "taintflow.disableAutoVerify",
+        "title": "TaintFlow+: Disable Auto-Verify"
+      },
+      {
+        "command": "taintflow.toggleAutoVerify",
+        "title": "TaintFlow+: Toggle Auto-Verify"
+      },
+      {
+        "command": "taintflow.showStatus",
+        "title": "TaintFlow+: Show Settings Dashboard",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "taintflow.applyFix",
+        "title": "TaintFlow+: Apply Fix to File"
+      },
+      {
+        "command": "taintflow.sidebar.focus",
+        "title": "TaintFlow+: Show Dashboard"
+      },
+      {
+        "command": "taintflow.openFile",
+        "title": "TaintFlow+: Open File"
+      },
+      {
+        "command": "taintflow.fixFinding",
+        "title": "TaintFlow+: Fix with Antigravity",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "taintflow.fixAll",
+        "title": "TaintFlow+: Copy All Fix Prompts",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "taintflow.graphify.scanWorkspace",
+        "title": "Graphify: Rebuild Repository Index"
+      },
+      {
+        "command": "taintflow.graphify.generateContext",
+        "title": "Graphify: Generate Repository Context"
+      },
+      {
+        "command": "taintflow.graphify.explainFile",
+        "title": "Graphify: Explain Current File"
+      },
+      {
+        "command": "taintflow.graphify.explainArchitecture",
+        "title": "Graphify: Explain Architecture"
+      },
+      {
+        "command": "taintflow.graphify.copyAIContext",
+        "title": "Graphify: Copy AI Context"
+      },
+      {
+        "command": "taintflow.graphify.copyRepoMap",
+        "title": "Graphify: Copy Repository Map Data"
+      },
+      {
+        "command": "taintflow.graphify.exportContext",
+        "title": "Graphify: Export Context"
+      },
+      {
+        "command": "taintflow.graphify.exportArchitecture",
+        "title": "Graphify: Export Architecture Summary"
+      },
+      {
+        "command": "taintflow.graphify.openFullScreen",
+        "title": "Graphify: Open Full Screen Map",
+        "icon": "$(screen-full)"
+      }
+    ],
+    "configuration": {
+      "title": "TaintFlow+",
+      "properties": {
+        "taintflow.autoVerify": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable auto-verification of files on save, open, and paste."
+        },
+        "taintflow.enableNotificationToasts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a minimalistic notification popup in the bottom right corner when a new security risk is detected."
+        },
+        "taintflow.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "api",
+            "local"
+          ],
+          "default": "auto",
+          "description": "Select LLM execution mode: Auto (Hybrid) uses API first with local fallback; API Only; or Local LLM (Ollama) Only."
+        },
+        "taintflow.localModel": {
+          "type": "string",
+          "default": "auto",
+          "description": "Select the local LLM model name to use with Ollama. Set to 'auto' to automatically detect the best available coder, llama, or gemma model."
+        },
+        "taintflow.providers": {
+          "type": "object",
+          "default": {
+            "anthropic": true,
+            "google": true,
+            "groq": true
+          },
+          "description": "Enable or disable individual analysis providers."
+        },
+        "taintflow.anthropic.priority": {
+          "type": "integer",
+          "default": 30,
+          "description": "Priority for Anthropic provider (lower numbers run first)."
+        },
+        "taintflow.anthropic.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic API Key (fallback if not stored securely via configure command)."
+        },
+        "taintflow.google.priority": {
+          "type": "integer",
+          "default": 10,
+          "description": "Priority for Google provider (lower numbers run first, Google = top priority)."
+        },
+        "taintflow.google.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Google API Key (fallback if not stored securely via configure command)."
+        },
+        "taintflow.groq.priority": {
+          "type": "integer",
+          "default": 20,
+          "description": "Priority for Groq provider (lower numbers run first, Groq = second priority)."
+        },
+        "taintflow.groq.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Groq API Key (fallback if not stored securely via configure command)."
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "taintflow-sidebar",
+          "title": "TaintFlow+",
+          "icon": "resources/shield.svg"
+        }
+      ]
+    },
+    "views": {
+      "taintflow-sidebar": [
+        {
+          "id": "taintflow.views.dashboard",
+          "name": "Scan Results"
+        },
+        {
+          "type": "webview",
+          "id": "taintflow.graphifyView",
+          "name": "Graphify Repository Map"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "taintflow.fixFinding",
+          "when": "view == taintflow.views.dashboard && viewItem == findingItem",
+          "group": "inline"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "taintflow.showStatus",
+          "group": "navigation@10"
+        },
+        {
+          "command": "taintflow.fixAll",
+          "group": "navigation@20"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "taintflow.showStatus",
+          "when": "view == taintflow.views.dashboard",
+          "group": "navigation@10"
+        },
+        {
+          "command": "taintflow.fixAll",
+          "when": "view == taintflow.views.dashboard",
+          "group": "navigation@20"
+        },
+        {
+          "command": "taintflow.graphify.openFullScreen",
+          "when": "view == taintflow.graphifyView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "npx esbuild src/extension.ts --bundle --platform=node --target=node18 --external:vscode --outfile=out/extension.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "groq-sdk": "^0.9.0"
+  }
+}

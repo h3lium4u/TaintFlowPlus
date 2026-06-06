@@ -1,86 +1,93 @@
-# TaintFlow+ Release & Documentation Manifest
+# TaintFlow+ Documentation
 
-This document serves as the single source of truth for all project documentation, metadata, versions, configuration keys, and hosted assets for the **TaintFlow+** suite.
-
----
-
-## 1. Extension Metadata
-
-| Metadata Field | Value | Description |
-| :--- | :--- | :--- |
-| **Extension Name** | `taintflow-plus` | Package registry identifier |
-| **Display Name** | `TaintFlow+ v1` | Display title in IDEs / Marketplace |
-| **Publisher ID** | `F1ZZ4N` | Author credentials namespace |
-| **Extension ID** | `f1zz4n.taintflow-plus` | Unique installation identifier |
-| **Current Version** | `1.0.1` | Semantic version string |
-| **License** | `MIT` | Open-source licensing protocol |
-| **GitHub Repository** | `https://github.com/h3lium4u/TaintFlowPlus` | Code source repository |
-| **Clone URL** | `https://github.com/h3lium4u/TaintFlowPlus.git` | Target clone repository |
-| **Bugs / Issues** | `https://github.com/h3lium4u/TaintFlowPlus/issues` | Issue reporting channel |
-| **Homepage** | `https://github.com/h3lium4u/TaintFlowPlus` | Main landing page |
+This guide provides a focused overview of the **TaintFlow+** project, configuration settings, development/build implementation steps, usage instructions, and current version details.
 
 ---
 
-## 2. Project Documentation Files Index
+## 1. About the Project
 
-Here is a list of every Markdown (`.md`) file included in the repository, along with its specific purpose:
+**TaintFlow+** is a real-time, hybrid security verification and repository intelligence suite designed for IDEs. It automatically verifies source code safety as you edit, paste, or save, combining static analysis and artificial intelligence (Local LLMs and Cloud AI providers) to detect and triage vulnerabilities, secrets, SQL injections, and other critical risks.
 
-### 📄 Root Directory Files
-
-*   **[README.md](README.md)**
-    *   **Role**: Primary workspace documentation page.
-    *   **Contents**: Full-screen node graph previews, architecture maps, detailed developer step-by-step setup guides, configuration settings explanations, and maintainer credentials.
-*   **[CONTRIBUTING.md](CONTRIBUTING.md)**
-    *   **Role**: Guidelines for developers contributing changes to the repository.
-    *   **Contents**: Initial setup CLI steps, command reference guides, testing workflows, and local pull request check parameters.
-*   **[SECURITY.md](SECURITY.md)**
-    *   **Role**: Guidelines for reporting security vulnerabilities found in the analyzer engine itself.
-    *   **Contents**: Disclosures guidelines, target contact email addresses, and expected security review SLAs.
-*   **[PRIVACY.md](PRIVACY.md)**
-    *   **Role**: Privacy statements detailing data management practices.
-    *   **Contents**: Detailed explanation of the "Local-First" telemetry model and strict opt-in rules for external cloud LLM verification API providers.
-*   **[ROADMAP.md](ROADMAP.md)**
-    *   **Role**: Project milestones and future targets.
-    *   **Contents**: Feature checklists for future releases, cross-agent memory modules, and IDE sidecar integrations.
-*   **[SUPPORTED_IDES.md](SUPPORTED_IDES.md)**
-    *   **Role**: IDE compatibility matrix.
-    *   **Contents**: Verified compatibility configurations for VS Code, Cursor, Antigravity, and Windsurf IDE environments.
-*   **[SECURITY_RULES.md](SECURITY_RULES.md)**
-    *   **Role**: Verification reference guide.
-    *   **Contents**: Enumerates default patterns for all 14+ supported languages and provides formatting examples for adding custom rules.
-*   **[CHANGELOG.md](CHANGELOG.md)**
-    *   **Role**: Version release history.
-    *   **Contents**: Version logs, bug fix annotations, and feature release lists.
-
-### 📄 Extension Directory Files
-
-*   **[vscode-extension/README.md](vscode-extension/README.md)**
-    *   **Role**: Extension marketplace detail page (rendered under the Details tab inside IDEs).
-    *   **Contents**: Clean feature overviews, settings configurations table, interface overview descriptions, and quickstart setup steps.
+### Key Features
+*   **Static Scanner**: Instant heuristics-based scanning for 14+ languages.
+*   **Hybrid AI Core**: Offloads deep security checks to local models (via Ollama) or cloud providers (Gemini, Groq).
+*   **Graphify & Neural Flow**: Generates interactive visualizations of file dependencies, database interactions, external service boundaries, and security findings.
+*   **Interactive Taint Paths**: Visualizes how untrusted data propagates from sources to vulnerable sinks.
+*   **Auto-Fix Recommendations**: Offers inline IDE suggestions to replace vulnerable code with secure alternatives.
 
 ---
 
-## 3. Hosted Assets & Image Links
+## 2. Version Information
 
-The following public URLs serve the static assets and screenshots referenced in the markdown documentation files:
-
-| Asset Name | Target URL | Description / Role |
-| :--- | :--- | :--- |
-| **Main Project Logo** | `https://files.catbox.moe/ep1u9c.png` | Circular TF+ logo used at the top of the root README and on GitHub. |
-| **Interface Overview** | `https://files.catbox.moe/ssb7ey.png` | Annotated screenshot showing the Status Bar (①), Sidebar Header (②), and Graphify Map (③) interfaces. |
-| **Graphify Preview** | `https://files.catbox.moe/tawysg.png` | Full-screen node graph visualization mapping architecture connections, services, database interfaces, and security warnings. |
-| **Diagnostics Preview** | `https://files.catbox.moe/x4zrhi.png` | Real-time VS Code editor editor screen displaying diagnostics highlighting and list sidebars. |
+*   **Current Stable Version**: `1.0.1`
+*   **Extension ID**: `f1zz4n.taintflow-plus`
+*   **Publisher ID**: `F1ZZ4N`
+*   **License**: `MIT`
 
 ---
 
-## 4. Key Settings & Extension Keys
+## 3. Configuration Settings
 
-| Configuration Key | Type | Default Value | Description |
+TaintFlow+ is configured through the IDE settings (`Ctrl+,` or `Cmd+,`). Below are the primary configuration options:
+
+| Setting Key | Type | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `taintflow.autoVerify` | `boolean` | `true` | Runs scanning automatically when files are opened, edited, or saved. |
-| `taintflow.enableNotificationToasts` | `boolean` | `true` | Triggers notification alert cards when new risks are identified. |
-| `taintflow.mode` | `string` | `"auto"` | Analysis routing: `auto` (hybrid), `api` (cloud only), `local` (Ollama only). |
-| `taintflow.localModel` | `string` | `"auto"` | The local Ollama model to verify code with (e.g. `deepseek-coder:1.3b`). |
-| `taintflow.providers` | `object` | `{ "anthropic": true, "google": true, "groq": true }` | Toggle switches for each cloud AI provider. |
-| `taintflow.google.apiKey` | `string` | `""` | Gemini verification API key string (fallback). |
-| `taintflow.groq.apiKey` | `string` | `""` | Groq verification API key string (fallback). |
+| `taintflow.autoVerify` | `boolean` | `true` | Automatically triggers analysis when files are opened, edited, or saved. |
+| `taintflow.enableNotificationToasts` | `boolean` | `true` | Triggers alert cards in the bottom-right corner when risks are found. |
+| `taintflow.mode` | `string` | `"auto"` | Scan engine mode: `auto` (hybrid API first + local fallback), `api` (cloud only), or `local` (Ollama only). |
+| `taintflow.localModel` | `string` | `"auto"` | Select the local Ollama model to use. If `"auto"`, it automatically detects the best available coder/llama/gemma model. |
+| `taintflow.providers` | `object` | `{ "anthropic": true, "google": true, "groq": true }` | Enable or disable individual cloud AI analysis providers. |
+| `taintflow.google.apiKey` | `string` | `""` | Fallback Google Gemini API Key. |
+| `taintflow.groq.apiKey` | `string` | `""` | Fallback Groq API Key. |
+
+*Note: For security, it is recommended to write keys to the OS keychain using the command: `TaintFlow+: Configure Cloud API Keys...`.*
+
+---
+
+## 4. How to Implement & Build (For Developers)
+
+### Initial Requirements
+*   **Node.js**: Version 18 or higher.
+*   **Git**: For version control.
+
+### Setup and Dependencies
+1. Clone the repository and navigate to the project root:
+   ```bash
+   git clone https://github.com/h3lium4u/TaintFlowPlus.git
+   cd TaintFlowPlus
+   ```
+2. Install monorepo dependencies:
+   ```bash
+   npm install
+   ```
+
+### Compile and Package the Extension
+1. Navigate to the extension folder:
+   ```bash
+   cd vscode-extension
+   ```
+2. Compile the TypeScript codebase:
+   ```bash
+   npm run compile
+   ```
+3. Package the extension into a `.vsix` file:
+   ```bash
+   npx @vscode/vsce package --no-dependencies -o taintflow-plus-v1.vsix
+   ```
+
+---
+
+## 5. How to Use
+
+### Real-Time Verification
+*   **Automatic Scanning**: Simply write code or open files in your workspace. TaintFlow+ runs in the background and highlights vulnerable lines with red underlines (diagnostics).
+*   **Issue List**: Open the **TaintFlow+** sidebar panel to view a structured hierarchical list of detected critical, high, medium, and low security findings across your workspace files.
+
+### Using Graphify (Repository Map)
+*   **Generate Map**: Click the **TaintFlow+** icon in the status bar or the sidebar and select "Open Graphify Map".
+*   **Analyze Nodes**: View entry points, controllers, services, databases, external APIs, and security findings laid out as a visual node network.
+*   **Interact**: Click on any node to jump to its source code, search nodes, or copy the context directly.
+
+### Applying Fixes
+*   **Inline Code Actions**: Place your cursor on any highlighted vulnerability.
+*   **Quick Fix**: Click the lightbulb icon (`Ctrl+.` or `Cmd+.`) and select **"TaintFlow+: Explain and Fix Security Issue"** to automatically swap in the secure code recommendation.

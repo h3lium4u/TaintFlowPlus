@@ -16,9 +16,9 @@ export function getWebviewContent(
     const hasGroq = !!groqKey;
     const hasAnthropic = !!anthropicKey;
 
-    const googleBadge = hasGoogle ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-warning">Missing</span>';
-    const groqBadge = hasGroq ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-warning">Missing</span>';
-    const anthropicBadge = hasAnthropic ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-warning">Missing</span>';
+    const googleBadge = hasGoogle ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-secondary">Optional</span>';
+    const groqBadge = hasGroq ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-secondary">Optional</span>';
+    const anthropicBadge = hasAnthropic ? '<span class="badge badge-success">Configured</span>' : '<span class="badge badge-secondary">Optional</span>';
     
     const modeAutoSelected = currentMode === 'auto' ? 'selected' : '';
     const modeApiSelected = currentMode === 'api' ? 'selected' : '';
@@ -202,6 +202,12 @@ export function getWebviewContent(
             background-color: rgba(245, 158, 11, 0.12);
             color: #f59e0b;
             border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-secondary {
+            background-color: rgba(255, 255, 255, 0.06);
+            color: #8e919a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .dashboard-row {

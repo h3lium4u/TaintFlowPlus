@@ -32,6 +32,34 @@ export async function activate(context: vscode.ExtensionContext) {
     scanner.startWatching();
     context.subscriptions.push(new vscode.Disposable(() => scanner.stopWatching()));
 
+    // Synchronize Graphify memory updates to Antigravity
+    scanner.onMemoryUpdated(async () => {
+        TaintFlowState.outputChannel.appendLine('TaintFlow+: Graphify memory updated. Synchronizing Graphify context...');
+        try {
+            const { injectGraphifyContextToAntigravity } = require('./commands/index');
+            await injectGraphifyContextToAntigravity(context);
+        } catch (err) {
+            TaintFlowState.outputChannel.appendLine(`TaintFlow+: Failed to sync memory update: ${err}`);
+        }
+    });
+
+    // Synchronize MCP on configuration changes or user accounts switching (which modifies config values/secrets)
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeConfiguration(async (event) => {
+            if (event.affectsConfiguration('taintflow')) {
+                TaintFlowState.outputChannel.appendLine('TaintFlow+: Configuration changed. Re-synchronizing MCP and Graphify context...');
+                try {
+                    const config = vscode.workspace.getConfiguration('taintflow');
+                    const mode = config.get<string>('mode', 'auto');
+                    const { syncKeysToMcpConfigs } = require('./commands/index');
+                    await syncKeysToMcpConfigs(context, mode);
+                } catch (err) {
+                    TaintFlowState.outputChannel.appendLine(`TaintFlow+: Failed to sync configuration update: ${err}`);
+                }
+            }
+        })
+    );
+
     const graphifyProvider = new GraphifyViewProvider(context, scanner);
     TaintFlowState.graphifyProvider = graphifyProvider;
     context.subscriptions.push(

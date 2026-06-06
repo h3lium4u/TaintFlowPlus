@@ -365,7 +365,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
     );
 }
 
-async function syncKeysToMcpConfigs(context: vscode.ExtensionContext, mode: string) {
+export async function syncKeysToMcpConfigs(context: vscode.ExtensionContext, mode: string) {
     try {
         const providers = ['google', 'groq', 'anthropic'];
         const envKeys: Record<string, string> = {};
@@ -525,7 +525,52 @@ async function syncKeysToMcpConfigs(context: vscode.ExtensionContext, mode: stri
                 writeJson(windsurfConfigPath, config);
             }
         }
+        await injectGraphifyContextToAntigravity(context);
     } catch (err) {
         TaintFlowState.outputChannel.appendLine(`TaintFlow+: Exception in syncKeysToMcpConfigs: ${err}`);
     }
 }
+
+export async function injectGraphifyContextToAntigravity(context: vscode.ExtensionContext) {
+    try {
+        const rootPath = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        if (!rootPath) return;
+
+        const memoryFilePath = path.join(rootPath, '.taintflow', 'graphify-memory.json');
+        if (!fs.existsSync(memoryFilePath)) {
+            TaintFlowState.outputChannel.appendLine('TaintFlow+: No Graphify memory file found to inject.');
+            return;
+        }
+
+        const memoryData = fs.readFileSync(memoryFilePath, 'utf-8');
+        const memory = JSON.parse(memoryData);
+
+        const { ContextGenerator } = require('../graphify/context-generator');
+        const aiContext = ContextGenerator.explainArchitecture(memory, 'markdown');
+
+        // Write as Antigravity Knowledge Item
+        const antigravityKnowledgeDir = path.join(os.homedir(), '.gemini', 'antigravity', 'knowledge', 'graphify_repository_context');
+        const artifactsDir = path.join(antigravityKnowledgeDir, 'artifacts');
+
+        if (!fs.existsSync(artifactsDir)) {
+            fs.mkdirSync(artifactsDir, { recursive: true });
+        }
+
+        const metadata = {
+            title: "Graphify Repository Map & Context",
+            summary: "Current Graphify architecture layout, entry points, database connections, and security findings for the workspace.",
+            lastAccessed: new Date().toISOString(),
+            artifacts: [
+                "artifacts/summary.md"
+            ]
+        };
+
+        fs.writeFileSync(path.join(antigravityKnowledgeDir, 'metadata.json'), JSON.stringify(metadata, null, 2), 'utf-8');
+        fs.writeFileSync(path.join(artifactsDir, 'summary.md'), aiContext, 'utf-8');
+
+        TaintFlowState.outputChannel.appendLine(`TaintFlow+: Successfully injected Graphify context into Antigravity Knowledge Base at ${antigravityKnowledgeDir}`);
+    } catch (err) {
+        TaintFlowState.outputChannel.appendLine(`TaintFlow+: Error injecting Graphify context: ${err}`);
+    }
+}
+

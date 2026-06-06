@@ -51,11 +51,16 @@ export async function writeAntigravityPrompt(document: vscode.TextDocument, fixP
     try {
         fs.writeFileSync(promptPath, fileContent, 'utf-8');
         TaintFlowState.outputChannel.appendLine(`TaintFlow+: Generated fix prompt written to ${promptPath}`);
-        if (!fileExists) {
-            vscode.window.showInformationMessage("TaintFlow+: Fix prompt document created.");
-        } else {
-            vscode.window.showInformationMessage("TaintFlow+: Fix prompt document updated.");
-        }
+        const msg = !fileExists 
+            ? "TaintFlow+: Fix prompt document created." 
+            : "TaintFlow+: Fix prompt document updated.";
+        vscode.window.showInformationMessage(msg, "Open").then(selection => {
+            if (selection === "Open") {
+                vscode.workspace.openTextDocument(vscode.Uri.file(promptPath)).then(doc => {
+                    vscode.window.showTextDocument(doc);
+                });
+            }
+        });
     } catch (err) {
         TaintFlowState.outputChannel.appendLine(`TaintFlow+: Failed to write fix prompt: ${err}`);
     }
@@ -119,7 +124,13 @@ export async function updateAutoFixPromptFile() {
             TaintFlowState.outputChannel.appendLine(`TaintFlow+: Cleared fix_prompt.md because no risks are present.`);
             
             // Notification should always come
-            vscode.window.showInformationMessage("TaintFlow+: No vulnerabilities found. The fix prompt document is empty.");
+            vscode.window.showInformationMessage("TaintFlow+: No vulnerabilities found. The fix prompt document is empty.", "Open").then(selection => {
+                if (selection === "Open") {
+                    vscode.workspace.openTextDocument(vscode.Uri.file(promptPath)).then(doc => {
+                        vscode.window.showTextDocument(doc);
+                    });
+                }
+            });
         } catch (err) {
             TaintFlowState.outputChannel.appendLine(`TaintFlow+: Failed to clear/create empty fix_prompt.md: ${err}`);
         }
@@ -149,10 +160,18 @@ export async function updateAutoFixPromptFile() {
         fs.writeFileSync(promptPath, fileContent, 'utf-8');
         TaintFlowState.outputChannel.appendLine(`TaintFlow+: Auto-generated fix prompt written to ${promptPath}`);
         
-        if (!fileExists) {
-            vscode.window.showInformationMessage("TaintFlow+: Fix prompt document created.");
-        } else if (previousContent !== fileContent) {
-            vscode.window.showInformationMessage("TaintFlow+: Fix prompt document updated.");
+        const msg = !fileExists
+            ? "TaintFlow+: Fix prompt document created."
+            : (previousContent !== fileContent ? "TaintFlow+: Fix prompt document updated." : undefined);
+            
+        if (msg) {
+            vscode.window.showInformationMessage(msg, "Open").then(selection => {
+                if (selection === "Open") {
+                    vscode.workspace.openTextDocument(vscode.Uri.file(promptPath)).then(doc => {
+                        vscode.window.showTextDocument(doc);
+                    });
+                }
+            });
         }
     } catch (err) {
         TaintFlowState.outputChannel.appendLine(`TaintFlow+: Failed to write auto-generated fix prompt: ${err}`);

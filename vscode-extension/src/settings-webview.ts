@@ -39,16 +39,16 @@ export function getWebviewContent(
     <title>TaintFlow+ Settings</title>
     <style>
         :root {
-            --bg-color: var(--vscode-editor-background, #1e1e1e);
-            --card-bg: var(--vscode-sideBar-background, #252526);
-            --border-color: var(--vscode-widget-border, rgba(255, 255, 255, 0.1));
-            --text-primary: var(--vscode-editor-foreground, #f3f4f6);
-            --text-secondary: var(--vscode-descriptionForeground, #9ca3af);
-            --accent-primary: var(--vscode-button-background, #0e639c);
-            --accent-hover: var(--vscode-button-hoverBackground, #1177bb);
-            --success: var(--vscode-testing-iconPassed, #10b981);
-            --warning: var(--vscode-testing-iconQueued, #f59e0b);
-            --danger: var(--vscode-testing-iconFailed, #ef4444);
+            --bg-color: #09090b;
+            --card-bg: #16161a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #8e919a;
+            --accent-primary: #2563eb;
+            --accent-hover: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         * {
@@ -141,19 +141,20 @@ export function getWebviewContent(
 
         select, input[type="password"], input[type="text"] {
             width: 100%;
-            background: var(--vscode-input-background, #2d2d2d);
+            background: #18181b;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: var(--vscode-input-foreground, var(--text-primary));
-            padding: 0.55rem 0.75rem;
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 0.65rem 0.85rem;
             font-family: inherit;
             font-size: 0.85rem;
             outline: none;
-            transition: border-color 0.15s ease;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
 
         select:focus, input:focus {
             border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
         }
 
         .key-input-container {
@@ -163,7 +164,7 @@ export function getWebviewContent(
         }
 
         .key-input-container input {
-            padding-right: 2.2rem;
+            padding-right: 2.5rem;
         }
 
         .eye-icon {
@@ -172,7 +173,9 @@ export function getWebviewContent(
             cursor: pointer;
             color: var(--text-secondary);
             user-select: none;
-            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: color 0.15s ease;
         }
 
@@ -462,7 +465,10 @@ export function getWebviewContent(
                 <label for="googleKey">Google Gemini API Key ${googleBadge}</label>
                 <div class="key-input-container">
                     <input type="password" id="googleKey" placeholder="Paste Google Gemini API Key..." value="${googleKey.replace(/"/g, '&quot;')}">
-                    <span class="eye-icon" onclick="toggleVisibility('googleKey')">👁️</span>
+                    <span class="eye-icon" onclick="toggleVisibility('googleKey', this)">
+                        <svg class="eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </span>
                 </div>
             </div>
 
@@ -471,7 +477,10 @@ export function getWebviewContent(
                 <label for="groqKey">Groq API Key ${groqBadge}</label>
                 <div class="key-input-container">
                     <input type="password" id="groqKey" placeholder="Paste Groq API Key..." value="${groqKey.replace(/"/g, '&quot;')}">
-                    <span class="eye-icon" onclick="toggleVisibility('groqKey')">👁️</span>
+                    <span class="eye-icon" onclick="toggleVisibility('groqKey', this)">
+                        <svg class="eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </span>
                 </div>
             </div>
 
@@ -480,7 +489,10 @@ export function getWebviewContent(
                 <label for="anthropicKey">Anthropic Claude API Key ${anthropicBadge}</label>
                 <div class="key-input-container">
                     <input type="password" id="anthropicKey" placeholder="Paste Anthropic API Key..." value="${anthropicKey.replace(/"/g, '&quot;')}">
-                    <span class="eye-icon" onclick="toggleVisibility('anthropicKey')">👁️</span>
+                    <span class="eye-icon" onclick="toggleVisibility('anthropicKey', this)">
+                        <svg class="eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </span>
                 </div>
             </div>
 
@@ -500,15 +512,18 @@ export function getWebviewContent(
     <script>
         const vscode = acquireVsCodeApi();
 
-        function toggleVisibility(id) {
+        function toggleVisibility(id, el) {
             const input = document.getElementById(id);
-            const icon = input.nextElementSibling;
+            const openSvg = el.querySelector('.eye-open');
+            const closedSvg = el.querySelector('.eye-closed');
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.innerText = '🙈';
+                openSvg.style.display = 'none';
+                closedSvg.style.display = 'block';
             } else {
                 input.type = 'password';
-                icon.innerText = '👁️';
+                openSvg.style.display = 'block';
+                closedSvg.style.display = 'none';
             }
         }
 

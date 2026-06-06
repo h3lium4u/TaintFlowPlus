@@ -309,7 +309,7 @@ body.vscode-dark {
 #search{background:transparent;border:none;outline:none;color:var(--c-text);font-size:11px;font-family:'Inter',sans-serif;width:150px;}
 #search::placeholder{color:var(--c-muted);}
 .tb-sep{width:1px;height:14px;background:var(--c-border);}
-.tb-btn{background:transparent;border:1px solid var(--c-border);border-radius:5px;color:var(--c-muted);font-size:10px;font-family:'Inter',sans-serif;padding:3px 7px;cursor:pointer;transition:all 0.15s;}
+.tb-btn{background:transparent;border:1px solid var(--c-border);border-radius:5px;color:var(--c-muted);font-size:10px;font-family:'Inter',sans-serif;padding:3px 7px;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:4px;line-height:1;}
 .tb-btn:hover{color:var(--c-text);border-color:var(--c-text);background:rgba(128,128,128,0.1);}
 #legend{position:absolute;bottom:14px;left:14px;display:flex;flex-direction:column;gap:4px;background:var(--c-panel-bg);border:1px solid var(--c-border);border-radius:8px;padding:9px 12px;backdrop-filter:blur(10px);z-index:50;}
 .leg-row{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--c-muted);}
@@ -407,10 +407,10 @@ body.vscode-dark {
   <span class="tb-logo">Graphify</span>
   <input id="search" type="text" placeholder="Search nodes…" autocomplete="off">
   <div class="tb-sep"></div>
-  ${!isPanel ? '<button class="tb-btn" id="btn-fs" title="Full Screen">⛶ <span class="btn-text">Full Screen</span></button>' : ''}
-  <button class="tb-btn" id="btn-rebuild" title="Rebuild Index">↺ <span class="btn-text">Rebuild</span></button>
-  <button class="tb-btn" id="btn-copy-ai" title="Copy Context">📋 <span class="btn-text">Copy Context</span></button>
-  <button class="tb-btn" id="btn-copy-map" title="Copy Repo Map">📋 <span class="btn-text">Copy Repo Map</span></button>
+  ${!isPanel ? '<button class="tb-btn" id="btn-fs" title="Full Screen"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg> <span class="btn-text">Full Screen</span></button>' : ''}
+  <button class="tb-btn" id="btn-rebuild" title="Rebuild Index"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg> <span class="btn-text">Rebuild</span></button>
+  <button class="tb-btn" id="btn-copy-ai" title="Copy Context"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> <span class="btn-text">Copy Context</span></button>
+  <button class="tb-btn" id="btn-copy-map" title="Copy Repo Map"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> <span class="btn-text">Copy Repo Map</span></button>
 </div>
 <div id="legend">
   <div class="leg-row"><span class="leg-dot" style="background:var(--c-l0)"></span>Entrypoints</div>
@@ -421,9 +421,9 @@ body.vscode-dark {
   <div class="leg-row"><span class="leg-dot" style="background:var(--c-vuln)"></span>Security Findings</div>
 </div>
 <div id="zoom-ctrls">
-  <button class="z-btn" id="btn-zi">+</button>
-  <button class="z-btn" id="btn-zo">−</button>
-  <button class="z-btn" id="btn-zf" title="Fit">⛶</button>
+  <button class="z-btn" id="btn-zi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+  <button class="z-btn" id="btn-zo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+  <button class="z-btn" id="btn-zf" title="Fit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 15v6h-6M3 9V3h6M10 14l-7 7m18-18l-7 7m0 4l7 7M3 3l7 7"></path></svg></button>
 </div>
 <div id="inspect">
   <button id="inspect-close">×</button>
